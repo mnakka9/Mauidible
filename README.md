@@ -8,6 +8,6 @@ A local Audiobook player done in MAUI to support both Windows and Android (prima
 * On click of any book - a Player will be loaded with first chapter automatically playing
 
 ## Future
-*Need to add bookmark feature*
-*Player extra controls*
-*May be a timer*
+* *Need to add bookmark feature*
+* *Player extra controls*
+* *May be a timer*

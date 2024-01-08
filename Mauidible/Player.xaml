@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mauidible.Player"
+			 xmlns:vm="clr-namespace:Mauidible.Domain"
+			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             Title="Player">
+	<Shell.TitleColor>Blue</Shell.TitleColor>
+	<Grid Padding="20">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"></RowDefinition>
+			<RowDefinition Height="200"></RowDefinition>
+		</Grid.RowDefinitions>
+		<ScrollView Grid.Row="0">
+			<ListView SeparatorVisibility="Default" SeparatorColor="BlueViolet" MinimumHeightRequest="200" ItemsSource="{Binding Chapters}" SelectionMode="Single" ItemSelected="ListView_ItemSelected">
+				<ListView.ItemTemplate>
+					<DataTemplate x:DataType="vm:Chapter">
+						<ViewCell>
+							<Label Text="{x:Binding Name}"></Label>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</ScrollView>
+		<toolkit:MediaElement Grid.Row="1"
+                x:Name="MediaElement"
+                ShouldAutoPlay="True"
+                />
+	</Grid>
+</ContentPage>

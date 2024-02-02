@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mauidible.Player"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 x:Class="Mauidible.Player"
 			 xmlns:vm="clr-namespace:Mauidible.Domain"
 			 xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             Title="Player">
+			 Title="Player"
+			 Unloaded="ContentPage_Unloaded"
+			 >
 	<Shell.TitleColor>Blue</Shell.TitleColor>
 	<Grid Padding="20">
 		<Grid.RowDefinitions>
@@ -22,9 +24,29 @@
 				</ListView.ItemTemplate>
 			</ListView>
 		</ScrollView>
-		<toolkit:MediaElement Grid.Row="1"
-                x:Name="MediaElement"
-                ShouldAutoPlay="True"
-                />
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto"></ColumnDefinition>
+				<ColumnDefinition Width="*"></ColumnDefinition>
+			</Grid.ColumnDefinitions>
+			<Image x:Name="coverImage"
+				   Aspect="AspectFill"
+				   HorizontalOptions="Start"
+				   Grid.Column="0"
+				   >
+				
+			</Image>
+			<toolkit:MediaElement Grid.Column="0"
+				ShouldAutoPlay="True"
+				x:Name="MediaElement"
+				ShouldShowPlaybackControls="True"
+				MediaEnded="MediaElement_MediaEnded"
+				>
+			</toolkit:MediaElement>
+			<VerticalStackLayout Grid.Column="1">
+				<Label Text="Bookmarks"></Label>
+			</VerticalStackLayout>
+		</Grid>
+		
 	</Grid>
 </ContentPage>

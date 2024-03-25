@@ -2,11 +2,15 @@ using CommunityToolkit.Maui.Views;
 
 using Mauidible.Domain;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Mauidible;
 
 [QueryProperty("Item", "Item")]
 public partial class Player : ContentPage
 {
+    public List<Bookmark> Bookmarks { get; set; } = [];
+
     public AudioBook Item
     {
         get => (AudioBook)BindingContext;
@@ -21,13 +25,6 @@ public partial class Player : ContentPage
     {
         InitializeComponent();
         dbContext = appDbContext;
-
-        if (Item?.ImageUrl != null)
-        {
-            var url = Item.ImageUrl!;
-
-            coverImage.Source = url.Contains("http") ? ImageSource.FromUri(new Uri(url)) : ImageSource.FromFile(url);
-        }
     }
 
     protected override void OnNavigatedTo (NavigatedToEventArgs args)
@@ -42,10 +39,23 @@ public partial class Player : ContentPage
 
             if (book.Chapters.Count > 0)
             {
-                MediaElement.Stop();
-                MediaElement.Source = FileMediaSource.FromFile(book.Chapters[0].Path);
-                MediaElement.Play();
-                CurrentChapter = 0;
+                //MediaElement.Stop();
+                //MediaElement.Source = FileMediaSource.FromFile(book.Chapters[0].Path);
+                //MediaElement.Play();
+                //CurrentChapter = 0;
+
+                var chapterIds = book.Chapters.ConvertAll(x => x.Id);
+
+                var bookmarks = dbContext.Bookmarks.Where(x => chapterIds.Contains(x.ChapterId)).AsNoTracking().ToList();
+
+                if (bookmarks.Count > 0)
+                {
+                    Bookmarks.AddRange(bookmarks);
+                    BookmarksView.ItemsSource = null;
+                    BookmarksView.ItemsSource = Bookmarks;
+                }
+
+                ChaptersView.SelectedItem = book.Chapters[0];
             }
         }
     }
@@ -57,7 +67,7 @@ public partial class Player : ContentPage
             return;
         }
 
-        var chapterNumber = Item.Chapters.FindIndex(0, x => x.Id == item.Id); ;
+        var chapterNumber = Item.Chapters.FindIndex(0, x => x.Id == item.Id);
 
         if (chapterNumber > 0)
         {
@@ -76,18 +86,66 @@ public partial class Player : ContentPage
     {
         CurrentChapter++;
 
+        if (CurrentChapter >= Item.Chapters.Count)
+        {
+            return;
+        }
+
         var chapter = Item.Chapters[CurrentChapter];
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            MediaElement.Source = FileMediaSource.FromFile(chapter.Path);
-            MediaElement.Stop();
-            MediaElement.Play();
+            ChaptersView.SelectedItem = chapter;
         });
+
+        //MainThread.BeginInvokeOnMainThread(() =>
+        //{
+        //    MediaElement.Source = FileMediaSource.FromFile(chapter.Path);
+        //    MediaElement.Stop();
+        //    MediaElement.Play();
+        //});
     }
 
     private void ContentPage_Unloaded (object sender, EventArgs e)
     {
         MediaElement.Handler?.DisconnectHandler();
+    }
+
+    private void AddBookmark_Clicked (object sender, EventArgs e)
+    {
+        var position = MediaElement.Position.TotalMilliseconds;
+
+        if (position > 0 && ChaptersView.SelectedItem is Chapter chapter)
+        {
+            var bookmark = new Bookmark
+            {
+                ChapterId = chapter.Id,
+                Description = chapter.Name,
+                TimeInMs = position,
+                Title = chapter.Name
+            };
+
+            dbContext.Bookmarks.Add(bookmark);
+            dbContext.SaveChanges();
+
+            Bookmarks.Add(bookmark);
+
+            MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                BookmarksView.ItemsSource = null;
+                BookmarksView.ItemsSource = Bookmarks;
+            });
+        }
+    }
+
+    private void BookmarksView_ItemSelected (object sender, SelectedItemChangedEventArgs e)
+    {
+        if (e.SelectedItem is Bookmark bookmark)
+        {
+            var chapter = Item.Chapters.First(x => x.Id == bookmark.ChapterId);
+            ChaptersView.SelectedItem = chapter;
+
+            MainThread.BeginInvokeOnMainThread(() => MediaElement.SeekTo(TimeSpan.FromMilliseconds(bookmark.TimeInMs)));
+        }
     }
 }

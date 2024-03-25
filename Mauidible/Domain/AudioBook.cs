@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mauidible.Domain
 {
@@ -38,7 +39,7 @@ namespace Mauidible.Domain
 
         public Guid BookId { get; set; }
 
-        public List<Bookmark>? Bookmarks { get; set;} = [];
+        public List<Bookmark>? Bookmarks { get; set; } = [];
     }
 
     public class Bookmark
@@ -53,5 +54,8 @@ namespace Mauidible.Domain
         public double TimeInMs { get; set; }
 
         public Guid ChapterId { get; set; }
+
+        [NotMapped]
+        public string Time => $"{Title}-{TimeSpan.FromMilliseconds(TimeInMs).ToString(@"hh\:mm\:ss")}";
     }
 }

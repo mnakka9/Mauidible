@@ -7,46 +7,69 @@
 			 Title="Player"
 			 Unloaded="ContentPage_Unloaded"
 			 >
-	<Shell.TitleColor>Blue</Shell.TitleColor>
+	<Shell.TitleColor>#6035ec</Shell.TitleColor>
 	<Grid Padding="20">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"></RowDefinition>
 			<RowDefinition Height="200"></RowDefinition>
 		</Grid.RowDefinitions>
-		<ScrollView Grid.Row="0">
-			<ListView SeparatorVisibility="Default" SeparatorColor="BlueViolet" MinimumHeightRequest="200" ItemsSource="{Binding Chapters}" SelectionMode="Single" ItemSelected="ListView_ItemSelected">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"></ColumnDefinition>
+			<ColumnDefinition Width="*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+		<ScrollView Grid.Column="0" Grid.Row="0">
+			<ListView SeparatorVisibility="Default" 
+					  x:Name="ChaptersView"
+					  SeparatorColor="BlueViolet" 
+					  MaximumHeightRequest="250" 
+					  ItemsSource="{Binding Chapters}" 
+					  SelectionMode="Single" 
+					  ItemSelected="ListView_ItemSelected">
 				<ListView.ItemTemplate>
 					<DataTemplate x:DataType="vm:Chapter">
 						<ViewCell>
-							<Label Text="{x:Binding Name}"></Label>
+							<StackLayout Padding="10">
+								<Label Text="{Binding Name}" TextColor="Blue" />
+							</StackLayout>
 						</ViewCell>
 					</DataTemplate>
 				</ListView.ItemTemplate>
 			</ListView>
 		</ScrollView>
-		<Grid Grid.Row="1">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"></ColumnDefinition>
-				<ColumnDefinition Width="*"></ColumnDefinition>
-			</Grid.ColumnDefinitions>
-			<Image x:Name="coverImage"
-				   Aspect="AspectFill"
-				   HorizontalOptions="Start"
-				   Grid.Column="0"
-				   >
-				
-			</Image>
-			<toolkit:MediaElement Grid.Column="0"
+		<StackLayout Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+			<toolkit:MediaElement
 				ShouldAutoPlay="True"
 				x:Name="MediaElement"
 				ShouldShowPlaybackControls="True"
 				MediaEnded="MediaElement_MediaEnded"
 				>
 			</toolkit:MediaElement>
-			<VerticalStackLayout Grid.Column="1">
-				<Label Text="Bookmarks"></Label>
-			</VerticalStackLayout>
-		</Grid>
-		
+			<Button
+				Margin="20"
+				Text="Add Bookmark"
+				BackgroundColor="BlueViolet"
+				TextColor="White"
+				Clicked="AddBookmark_Clicked"
+				x:Name="AddBookmark">
+				
+			</Button>
+		</StackLayout>
+		<StackLayout Grid.Column="1" Orientation="Vertical">
+			<Label Text="Bookmarks" TextColor="BlueViolet" FontSize="Header"></Label>
+			<ListView Margin="10" 
+					  MinimumHeightRequest="250"
+					  ItemSelected="BookmarksView_ItemSelected"
+					  x:Name="BookmarksView">
+				<ListView.ItemTemplate>
+					<DataTemplate x:DataType="vm:Bookmark">
+						<ViewCell>
+							<StackLayout Padding="10">
+								<Label Text="{Binding Time}" TextColor="LightGreen" />
+							</StackLayout>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</StackLayout>
 	</Grid>
 </ContentPage>

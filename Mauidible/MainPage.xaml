@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:vm="clr-namespace:Mauidible.Domain"
+             xmlns:vm="clr-namespace:Mauidible.Domain"
              x:Class="Mauidible.MainPage">
 	<Shell.TitleColor>Blue</Shell.TitleColor>
 	<ScrollView VerticalScrollBarVisibility="Default" HorizontalScrollBarVisibility="Never">
@@ -17,8 +17,8 @@
 					<FlexLayout Direction="Row" Wrap="Wrap" BindableLayout.ItemsSource="{Binding Books}">
 						<BindableLayout.ItemTemplate>
 							<DataTemplate>
-								<VerticalStackLayout Padding="10" MaximumHeightRequest="180" MaximumWidthRequest="200" Spacing="2">
-									<ImageButton x:Name="PlayBook" MaximumHeightRequest="150" Source="{Binding ImageUrl}" Clicked="PlayBook_Clicked"></ImageButton>
+								<VerticalStackLayout Padding="10" MaximumHeightRequest="220" MaximumWidthRequest="200" Spacing="2">
+									<ImageButton x:Name="PlayBook" MaximumHeightRequest="180" Source="{Binding ImageUrl}" Clicked="PlayBook_Clicked"></ImageButton>
 									<Label FontAttributes="Bold" TextColor="DarkBlue" Text="{Binding Title}"></Label>
 								</VerticalStackLayout>
 							</DataTemplate>
@@ -28,5 +28,4 @@
 			</StackLayout>
 		</VerticalStackLayout>
 	</ScrollView>
-
 </ContentPage>

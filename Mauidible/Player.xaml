@@ -8,68 +8,90 @@
 			 Unloaded="ContentPage_Unloaded"
 			 >
 	<Shell.TitleColor>#6035ec</Shell.TitleColor>
-	<Grid Padding="20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"></RowDefinition>
-			<RowDefinition Height="200"></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
-		</Grid.ColumnDefinitions>
-		<ScrollView Grid.Column="0" Grid.Row="0">
-			<ListView SeparatorVisibility="Default" 
-					  x:Name="ChaptersView"
-					  SeparatorColor="BlueViolet" 
-					  MaximumHeightRequest="250" 
-					  ItemsSource="{Binding Chapters}" 
+	<StackLayout>
+		<StackLayout x:Name="mnGrid" Padding="10">
+			<Frame Margin="15" BorderColor="#6b0043" HasShadow="False" Padding="0">
+				<ListView x:Name="ChaptersView"
+					  SeparatorColor="#7f85f5" 
+					  MaximumHeightRequest="300" 
+					  ItemsSource="{Binding Chapters}"
+					  Margin="9"
 					  SelectionMode="Single" 
 					  ItemSelected="ListView_ItemSelected">
-				<ListView.ItemTemplate>
-					<DataTemplate x:DataType="vm:Chapter">
-						<ViewCell>
-							<StackLayout Padding="10">
-								<Label Text="{Binding Name}" TextColor="Blue" />
-							</StackLayout>
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</ScrollView>
-		<StackLayout Orientation="Vertical" Grid.Column="0" Grid.Row="1">
-			<toolkit:MediaElement
-				ShouldAutoPlay="True"
-				x:Name="MediaElement"
+					<ListView.ItemTemplate>
+						<DataTemplate x:DataType="vm:Chapter">
+							<TextCell Text="{Binding ChapterName}" TextColor="Blue" />
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</Frame>
+			<StackLayout Margin="15" Orientation="Vertical">
+				<toolkit:MediaElement
+				ShouldAutoPlay="False"
 				ShouldShowPlaybackControls="True"
+				MaximumHeightRequest="110"
+				x:Name="MediaElement"
 				MediaEnded="MediaElement_MediaEnded"
 				>
-			</toolkit:MediaElement>
-			<Button
+				</toolkit:MediaElement>
+				<StackLayout Orientation="Horizontal" Spacing="9">
+					<Button
 				Margin="20"
-				Text="Add Bookmark"
+				
+						x:Name="ForwardButton"
+						Clicked="ForwardButton_Clicked"
+				BackgroundColor="#f7630c"
+				TextColor="White">
+						<Button.ImageSource>
+							<FontImageSource FontFamily="FluentIcons" Glyph="&#xf3fe;" />
+						</Button.ImageSource>
+					</Button>
+					<Button
+				Margin="20"
+						x:Name="RewindButton"
+						Clicked="RewindButton_Clicked"
+				BackgroundColor="#f7630c"
+				TextColor="White">
+						<Button.ImageSource>
+							<FontImageSource FontFamily="FluentIcons" Glyph="&#xf67f;" />
+						</Button.ImageSource>
+					</Button>
+					<Button
+				Margin="20"
 				BackgroundColor="BlueViolet"
 				TextColor="White"
 				Clicked="AddBookmark_Clicked"
 				x:Name="AddBookmark">
-				
+						<Button.ImageSource>
+							<FontImageSource FontFamily="FluentIcons" Glyph="&#xf1f6;" />
+						</Button.ImageSource>
+					</Button>
+				</StackLayout>
+			</StackLayout>
+			<Button
+				Margin="20"
+				BackgroundColor="OrangeRed"
+				TextColor="White"
+				Clicked="CloseImageButton_Clicked">
+				<Button.ImageSource>
+					<FontImageSource FontFamily="FluentIcons" Glyph="&#xf6bc;" />
+				</Button.ImageSource>
 			</Button>
-		</StackLayout>
-		<StackLayout Grid.Column="1" Orientation="Vertical">
-			<Label Text="Bookmarks" TextColor="BlueViolet" FontSize="Header"></Label>
-			<ListView Margin="10" 
+			<StackLayout x:Name="bookmarksPanel" Orientation="Vertical">
+				<Label Margin="10" Text="Bookmarks" TextColor="BlueViolet" FontSize="Large"></Label>
+				<Frame Padding="10">
+					<ListView Margin="10" 
 					  MinimumHeightRequest="250"
 					  ItemSelected="BookmarksView_ItemSelected"
 					  x:Name="BookmarksView">
-				<ListView.ItemTemplate>
-					<DataTemplate x:DataType="vm:Bookmark">
-						<ViewCell>
-							<StackLayout Padding="10">
-								<Label Text="{Binding Time}" TextColor="LightGreen" />
-							</StackLayout>
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
+						<ListView.ItemTemplate>
+							<DataTemplate x:DataType="vm:Bookmark">
+								<TextCell Text="{Binding Title}" TextColor="#115ea3" />
+							</DataTemplate>
+						</ListView.ItemTemplate>
+					</ListView>
+				</Frame>
+			</StackLayout>
 		</StackLayout>
-	</Grid>
+	</StackLayout>
 </ContentPage>

@@ -1,25 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:Mauidible.Domain"
-             x:Class="Mauidible.MainPage">
-	<Shell.TitleColor>Blue</Shell.TitleColor>
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:vm="clr-namespace:Mauidible.Domain"
+			 Title="ManaAudioBookPlayer"
+			 x:Class="Mauidible.MainPage">
+	<Shell.TitleView>
+		<StackLayout>
+			<Label Text="Mana Audio Book Player" 
+				   VerticalOptions="Center"
+				   HorizontalOptions="Center"
+				   FontSize="Large"
+				   TextColor="BlueViolet"></Label>
+		</StackLayout>
+	</Shell.TitleView>
 	<ScrollView VerticalScrollBarVisibility="Default" HorizontalScrollBarVisibility="Never">
-		<VerticalStackLayout>
-			<StackLayout MinimumHeightRequest="100">
-				<StackLayout Orientation="Horizontal" FlowDirection="LeftToRight" Padding="10" Spacing="50">
-					<Label HorizontalOptions="Start" FontSize="Header" Text="Library" TextColor="BlueViolet"></Label>
-					<Button HorizontalOptions="End" VerticalOptions="End" x:Name="btnAddNewBook" Clicked="ButtonAddNewBook_Clicked"  MaximumHeightRequest="75" MinimumWidthRequest="200" TextColor="White" Text="AddNew" Background="MediumVioletRed"></Button>
+		<VerticalStackLayout x:Name="mainLayout">
+			<StackLayout MinimumHeightRequest="50">
+				<StackLayout Padding="10">
+					<Button HorizontalOptions="Center" VerticalOptions="Center" x:Name="btnAddNewBook" Clicked="ButtonAddNewBook_Clicked"  MaximumHeightRequest="50" MinimumWidthRequest="200" TextColor="White" Text="AddNew" Background="MediumVioletRed"></Button>
 				</StackLayout>
 			</StackLayout>
 			<StackLayout Padding="15" Spacing="10">
 				<ScrollView HorizontalScrollBarVisibility="Default" VerticalScrollBarVisibility="Always">
-					<FlexLayout Direction="Row" Wrap="Wrap" BindableLayout.ItemsSource="{Binding Books}">
+					<FlexLayout Direction="Row"
+								AlignContent="SpaceEvenly"
+								JustifyContent="Center"
+								AlignItems="Center"
+								Wrap="Wrap" BindableLayout.ItemsSource="{Binding Books}">
 						<BindableLayout.ItemTemplate>
 							<DataTemplate>
-								<VerticalStackLayout Padding="10" MaximumHeightRequest="220" MaximumWidthRequest="200" Spacing="2">
-									<ImageButton x:Name="PlayBook" MaximumHeightRequest="180" Source="{Binding ImageUrl}" Clicked="PlayBook_Clicked"></ImageButton>
-									<Label FontAttributes="Bold" TextColor="DarkBlue" Text="{Binding Title}"></Label>
+								<VerticalStackLayout Padding="10" MinimumHeightRequest="{Binding ImageParentMinHeightRequest}" MaximumHeightRequest="{Binding ImageParentMaxHeightRequest}" MaximumWidthRequest="{Binding ImageParentMaxWidthRequest}" Spacing="2">
+									<ImageButton x:Name="PlayBook" MaximumWidthRequest="{Binding ImageMaxWidthRequest}" MaximumHeightRequest="{Binding ImageMaxHeightRequest}" Source="{Binding ImageUrl}" Clicked="PlayBook_Clicked"></ImageButton>
+									<Label LineBreakMode="TailTruncation" FontAttributes="Bold" TextColor="DarkBlue" Text="{Binding Title}"></Label>
 								</VerticalStackLayout>
 							</DataTemplate>
 						</BindableLayout.ItemTemplate>

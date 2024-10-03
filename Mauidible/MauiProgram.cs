@@ -2,14 +2,13 @@
 using CommunityToolkit.Maui.Storage;
 
 using Mauidible.Domain;
-
-using Microsoft.Extensions.Logging;
+using Mauidible.Services;
 
 namespace Mauidible
 {
     public static class MauiProgram
     {
-        public static MauiApp CreateMauiApp ()
+        public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
             builder
@@ -21,20 +20,17 @@ namespace Mauidible
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("FluentIcons.ttf", "FluentIcons");
                 });
-
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
 
             builder.Services.AddSingleton(FolderPicker.Default);
             builder.Services.AddDbContext<AppDbContext>();
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<Player>();
+            builder.Services.AddSingleton<IMetadataService, MetadataService>();
 
-            var context = new AppDbContext();
+            using var context = new AppDbContext();
             context.Database.EnsureCreated();
-            context.Dispose();
 
             return builder.Build();
         }
